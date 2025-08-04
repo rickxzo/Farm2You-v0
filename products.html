@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Farm2Go - Products</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Underdog&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Karla:wght@200..800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --green: #1e6521;
+            --yellow: rgb(239, 181, 20);
+            --dark-green: #09360c;
+            --light-gray: #f9f9f9;
+        }
+
+        /* Navbar Styles */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            background-color: white;
+            border-bottom: 1px solid #ddd;
+            color: var(--green);
+        }
+
+        .navbar-title {
+            font-family: 'Underdog';
+            font-size: 1.8rem;
+            color: var(--green);
+        }
+
+        .nav-links, .nav-right {
+            display: none;
+        }
+
+        .hamburger {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            cursor: pointer;
+        }
+
+        .hamburger div {
+            width: 25px;
+            height: 3px;
+            background-color: var(--green);
+        }
+
+        /* Sidebar */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            right: 0;
+            width: 250px;
+            height: 100%;
+            background: white;
+            padding-top: 60px;
+            box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
+            display: none;
+            flex-direction: column;
+            gap: 1.5rem;
+            padding-left: 1.5rem;
+            transition: transform 0.3s ease;
+            transform: translateX(100%);
+            z-index: 999;
+        }
+
+        .sidebar.open {
+            display: flex;
+            transform: translateX(0);
+        }
+
+        .sidebar a {
+            color: var(--green);
+            text-decoration: none;
+            font-size: 1.2rem;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 24px;
+            color: var(--green);
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        @media (min-width: 768px) {
+            .nav-links, .nav-right {
+                display: flex;
+                gap: 1.2rem;
+            }
+
+            .hamburger {
+                display: none;
+            }
+        }
+
+        /* Product Page Styles */
+        body {
+            font-family: "Karla", sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: white;
+        }
+        
+        .listing-type {
+            text-align: left;
+            font-size: 33px;
+            font-weight: bold;
+            margin: 33px 43px 15px;
+            color: var(--dark-green);
+            font-family: "Ubuntu";
+        }
+        
+        .search-bar {
+            text-align: left;
+            margin-bottom: 20px;
+            margin-left: 43px;
+            margin-top: 35px;
+        }
+        
+        .search-bar input {
+            width: 400px;
+            padding: 8px 15px;
+            border: 1px solid #e7e7e7;
+            border-radius: 5px;
+            outline: none;
+            font-size: 14px;
+            height: 27px;
+        }
+        
+        .product-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 24px;
+            padding: 20px;
+            justify-items: center;
+            margin-left: 25.5px;
+            margin-right: 27px;
+        }
+        
+        .product-box {
+            padding: 5px;
+            text-align: center;
+            width: 270px;
+            font-family: "Ubuntu";
+        }
+        
+        .product-image {
+            border: 1px solid rgb(226, 226, 226);
+            border-radius: 10px;
+            background-color: white;
+        }
+        
+        .product-box img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            border-radius: 10px;
+        }
+        
+        .product-box button {
+            background-color: var(--green);
+            color: white;
+            padding: 8px 12px;
+            border: none;
+            cursor: pointer;
+            height: 35px;
+            border-radius: 4px;
+            margin-top: 8px;
+            width: 100%;
+            font-weight: 500;
+            transition: background-color 0.3s;
+        }
+        
+        .product-box button:hover {
+            background-color: var(--dark-green);
+        }
+        
+        .product-info {
+            bottom: 0;
+            width: 93%;
+            padding: 5px 10px;
+            display: flex;
+            justify-content: space-between;
+            background: rgba(255, 255, 255, 0.8);
+            font-size: 15px;
+            font-weight: 400;
+            font-family: "Ubuntu";
+            color: #000;
+            margin-top: 12px;
+        }
+        
+        .product-name {
+            text-align: left;
+            color: var(--dark-green);
+        }
+        
+        .product-price {
+            text-align: right;
+            color: var(--green);
+            font-weight: bold;
+        }
+        
+        .search-input-wrapper {
+            position: relative;
+            display: inline-block;
+        }
+        
+        .search-input-wrapper i {
+            position: absolute;
+            top: 50%;
+            left: 10px;
+            transform: translateY(-50%);
+            color: #888;
+            font-size: 14px;
+        }
+        
+        .search-input-wrapper input {
+            padding-left: 35px;
+        }
+        
+        a {
+            text-decoration: none;
+            color: var(--green);
+        }
+
+        /* Size Modal */
+        #sizeModal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal-content {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            width: 300px;
+            text-align: center;
+        }
+        
+        .modal-content h3 {
+            color: var(--dark-green);
+            margin-bottom: 20px;
+        }
+        
+        .modal-content select, .modal-content input {
+            padding: 8px;
+            width: 100%;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        
+        .modal-buttons {
+            margin-top: 20px;
+        }
+        
+        .modal-buttons button {
+            padding: 8px 16px;
+            margin: 0 5px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        
+        .add-btn {
+            background-color: var(--green);
+            color: white;
+        }
+        
+        .cancel-btn {
+            background-color: #ddd;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <!-- NAVBAR -->
+    <nav class="navbar">
+        <a href="/" class="navbar-title">Farm2Go</a>
+        <div class="nav-links">
+            <a href="/">Home</a>
+            <a href="/products">Products</a>
+            <a href="/farmer-dashboard">Farmer Dashboard</a>
+        </div>
+        <div class="nav-right">
+            <a href="/cart">Cart</a>
+            <a href="/user">User</a>
+        </div>
+        <div class="hamburger" onclick="toggleSidebar()">
+            <div></div><div></div><div></div>
+        </div>
+    </nav>
+
+    <!-- SIDEBAR -->
+    <div class="sidebar" id="sidebar">
+        <div class="close-btn" onclick="toggleSidebar()">&times;</div>
+        <a href="/">Home</a>
+        <a href="/products">Products</a>
+        <a href="/farmer-dashboard">Farmer Dashboard</a>
+        <a href="/orders">Orders</a>
+        <a href="/cart">Cart</a>
+        <a href="/user">User</a>
+    </div>
+
+    <div class="listing-type">
+        Fresh Farm Products
+    </div>
+    
+    <div class="search-bar">
+        <div class="search-input-wrapper">
+            <i class="fas fa-search"></i>
+            <input type="text" id="search" onkeyup="searchProducts()" placeholder="Search products...">
+        </div>
+    </div>
+    
+    <div class="product-container">
+        {% for product in products %}
+        <div class="product-box">
+            <div class="product-image">
+                <img src="{{ product[7] }}" alt="{{ product[0] }}">
+            </div>
+            <div class="product-details">
+                <div class="product-info">
+                    <span class="product-name">{{ product[2] }}</span>
+                    <span class="product-price">${{ product[4] }}/kg</span>
+                </div>
+                {{product[3]}}
+                <button onclick="openQuantityModal('{{ product[0] }}')">Add to Cart</button>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    
+    <!-- Updated Modal (replace the existing one) -->
+    <div id="quantityModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; 
+    background-color: rgba(0, 0, 0, 0.5); z-index: 1000; justify-content: center; align-items: center;">
+        <div style="background-color: white; padding: 30px; border-radius: 10px; width: 300px; text-align: center;">
+            <h3>Select Quantity</h3>
+            <input type="number" id="quantityInput" min="1" value="1" style="padding: 8px; width: 100%; margin: 15px 0;">
+            <div>
+                <button onclick="confirmAddToCart()" style="margin-right: 10px; background-color: #1e6521; color: white; border: none; padding: 8px 16px; border-radius: 4px;">Add</button>
+                <button onclick="closeModal()" style="background-color: #f0f0f0; border: none; padding: 8px 16px; border-radius: 4px;">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+<script>
+    let selectedProductId = null;
+    
+    function openQuantityModal(productId) {
+        selectedProductId = productId;
+        document.getElementById("quantityModal").style.display = "flex";
+    }
+    
+    function closeModal() {
+        selectedProductId = null;
+        document.getElementById("quantityModal").style.display = "none";
+        document.getElementById("quantityInput").value = "1";
+    }
+    
+    function confirmAddToCart() {
+        const quantity = parseInt(document.getElementById("quantityInput").value);
+        
+        if (!quantity || quantity < 1) {
+            alert("Please enter a valid quantity.");
+            return;
+        }
+
+        // Redirect with quantity only
+        window.location.href = `/add-to-cart?product_id=${selectedProductId}&quantity=${quantity}`;
+    }
+    </script>
+
+    <script>
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('open');
+        }
+
+        function searchProducts() {
+            let input = document.getElementById("search").value.toLowerCase();
+            let products = document.getElementsByClassName("product-box");
+            
+            for (let product of products) {
+                let name = product.getElementsByClassName("product-name")[0].innerText.toLowerCase();
+                
+                if (name.includes(input)) {
+                    product.style.display = "block";
+                } else {
+                    product.style.display = "none";
+                }
+            }
+        }
+    </script>
+</body>
+</html>

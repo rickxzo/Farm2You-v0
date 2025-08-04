@@ -1,0 +1,537 @@
+\<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Farm2Go</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400..700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Underdog&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --green: #1e6521;
+      --yellow: rgb(239, 181, 20);
+      --dark-green: #09360c;
+      --light-gray: #f9f9f9;
+      --dark-gray: #333;
+      --lighter-gray: #ccc;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+      overflow-x: hidden;
+      transition: padding-right 0.3s ease;
+    }
+
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem;
+      background-color: white;
+      border-bottom: 1px solid #ddd;
+      color: var(--green);
+    }
+
+    .navbar-title {
+      font-family: 'Underdog';
+      font-size: 1.8rem;
+      color: var(--green);
+    }
+
+    .nav-links, .nav-right {
+      display: flex;
+      gap: 1rem;
+    }
+
+    .nav-links a, .nav-right a {
+      color: var(--green);
+      text-decoration: none;
+      font-size: 1.1rem;
+    }
+
+    .hamburger {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      cursor: pointer;
+    }
+
+    .hamburger div {
+      width: 25px;
+      height: 3px;
+      background-color: var(--green);
+    }
+
+    .sidebar {
+      position: fixed;
+      top: 0;
+      right: 0;
+      width: 250px;
+      height: 100%;
+      background: white;
+      padding-top: 60px;
+      box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
+      display: none;
+      flex-direction: column;
+      gap: 1.5rem;
+      padding-left: 1.5rem;
+      transition: transform 0.3s ease;
+      transform: translateX(100%);
+      z-index: 999;
+    }
+
+    .sidebar.open {
+      display: flex;
+      transform: translateX(0);
+    }
+
+    .sidebar a {
+      color: var(--green);
+      text-decoration: none;
+      font-size: 1.2rem;
+    }
+
+    .close-btn {
+      position: absolute;
+      top: 15px;
+      right: 20px;
+      font-size: 24px;
+      color: var(--green);
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    @media (max-width: 768px) {
+      .nav-links, .nav-right {
+        display: none;
+      }
+    }
+
+    @media (min-width: 769px) {
+      .hamburger {
+        display: none;
+      }
+    }
+
+    .profile-section {
+      position: relative;
+      height: 300px;
+      background-color: var(--dark-gray);
+      background-image: url('your-image-url.jpg');
+      background-size: cover;
+      background-position: center;
+      filter: brightness(0.6);
+      display: flex;
+      align-items: center;
+      padding: 0 20px;
+      gap: 20px;
+    }
+
+    .profile-dp {
+      width: 120px;
+      height: 120px;
+      background-color: var(--lighter-gray);
+      border-radius: 50%;
+      border: 5px solid var(--green);
+      background-image: url('your-profile-image-url.jpg');
+      background-size: cover;
+      background-position: center;
+      cursor: pointer;
+    }
+
+    .profile-info {
+      color: white;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .profile-info h3 {
+      margin: 0;
+      font-size: 1.4rem;
+      font-weight: bold;
+    }
+
+    .profile-info p {
+      margin: 0;
+      font-size: 1.1rem;
+    }
+
+    .tab-btns {
+      display: flex;
+      gap: 10px;
+      margin: 20px;
+    }
+
+    .tab-btn {
+      padding: 10px 20px;
+      border: 1px solid var(--green);
+      cursor: pointer;
+      background-color: white;
+      color: var(--green);
+      border-radius: 5px;
+    }
+
+    .tab-btn.active {
+      background-color: var(--green);
+      color: white;
+    }
+
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    .product-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      justify-content: center;
+      margin-bottom: 30px;
+    }
+
+    .product-box {
+      width: 200px;
+      background-color: var(--light-gray);
+      border-radius: 8px;
+      padding: 10px;
+      text-align: center;
+    }
+
+    .product-box img {
+      width: 100%;
+      height: 150px;
+      object-fit: cover;
+      border-radius: 5px;
+    }
+
+    .product-box h4 {
+      margin: 10px 0;
+      font-size: 1rem;
+    }
+
+    .add-to-cart {
+      background-color: var(--green);
+      color: white;
+      border: none;
+      padding: 5px 10px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .orders-list {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      margin: 20px;
+    }
+
+    .order-item {
+      background-color: var(--light-gray);
+      padding: 15px;
+      border-radius: 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .add-product-btn {
+      background-color: var(--yellow);
+      color: var(--green);
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+      margin: 20px;
+    }
+
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 9999;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgba(0,0,0,0.6);
+    }
+
+    .modal-content {
+      background-color: #fff;
+      margin: 10% auto;
+      padding: 20px;
+      border-radius: 10px;
+      width: 90%;
+      max-width: 500px;
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      position: relative;
+    }
+
+    .modal-content input,
+    .modal-content textarea {
+      width: 100%;
+      padding: 8px;
+      border: 1px solid var(--lighter-gray);
+      border-radius: 5px;
+      font-size: 1rem;
+    }
+
+    .modal-content label {
+      font-weight: bold;
+    }
+
+    .close {
+      position: absolute;
+      right: 20px;
+      top: 15px;
+      font-size: 28px;
+      font-weight: bold;
+      color: var(--dark-gray);
+      cursor: pointer;
+    }
+
+    .submit-btn {
+      background-color: var(--green);
+      color: white;
+      border: none;
+      padding: 10px;
+      font-size: 1rem;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    
+    .logout-btn {
+      background-color: #e74c3c;
+      color: white;
+      border: none;
+      padding: 10px;
+      font-size: 1rem;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-top: 20px;
+      width: 100%;
+    }
+    
+    .farmer-details {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    
+    .farmer-details p {
+      margin: 5px 0;
+    }
+    
+    .farmer-details strong {
+      color: var(--green);
+    }
+    
+    .action-buttons {
+      display: flex;
+      gap: 10px;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="navbar-title">Farm2Go</div>
+  <div class="nav-links">
+    <a href="/">Home</a>
+    <a href="/products">Products</a>
+    <a href="/farmer-dashboard">Farmer Dashboard</a>
+  </div>
+  <div class="nav-right">
+    <a href="/cart">Cart</a>
+    <a href="/user">User</a>
+  </div>
+  <div class="hamburger" onclick="toggleSidebar()">
+    <div></div><div></div><div></div>
+  </div>
+</nav>
+
+<div class="sidebar" id="sidebar">
+  <div class="close-btn" onclick="toggleSidebar()">&times;</div>
+  <a href="/">Home</a>
+  <a href="/products">Products</a>
+  <a href="/farmer-dashboard">Farmer Dashboard</a>
+  <a href="/cart">Cart</a>
+  <a href="/user">User</a>
+  <a href="#" onclick="openAboutModal()">About Farmer</a>
+  <a href="/logout">Logout</a>
+</div>
+
+<div class="profile-section">
+  <div class="profile-dp" onclick="openAboutModal()"></div>
+  <div class="profile-info">
+    <h3>{{farmer[3]}}</h3>
+    <p>by {{farmer[4]}}</p>
+    <p>Location: {{farmer[7]}}, {{farmer[8]}}</p>
+    <p>Rating: 4.5/5</p>
+    <p class="since">Since: {{farmer[12]}}</p>
+    <p class="about">About: {{farmer[11]}}</p>
+  </div>
+</div>
+
+<div class="tab-btns">
+  <button class="tab-btn active" onclick="showTab('products')">Products</button>
+  <button class="tab-btn" onclick="showTab('orders')">Orders</button>
+  <button class="tab-btn" onclick="openAboutModal()">About Farmer</button>
+</div>
+
+<div id="products" class="tab-content active">
+  <button class="add-product-btn" onclick="openModal()">Add Product</button>
+  <div class="product-list">
+    {% for product in products %}
+    <div class="product-box">
+      <img src="{{ product[7] }}" alt="{{ product[3] }}">
+      <h4>{{ product[2] }}</h4>
+      <p>${{ product[4] }}</p>
+      <form action="/remove-product" method="post">
+      <input type="hidden" name="id" value="{{product[0]}}">
+      <button class="add-to-cart">Remove Product</button>
+      </form>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+
+<div id="orders" class="tab-content">
+  <div class="orders-list">
+    <div class="order-item">
+      <p>Order #1 - 5kg Organic Tomatoes</p>
+      <div>
+        <button onclick="viewOrder(1)">View</button>
+        <button onclick="editOrder(1)">Edit</button>
+      </div>
+      <p>Status: Delivered</p>
+    </div>
+    <div class="order-item">
+      <p>Order #2 - 10kg Carrots</p>
+      <div>
+        <button onclick="viewOrder(2)">View</button>
+        <button onclick="editOrder(2)">Edit</button>
+      </div>
+      <p>Status: In Progress</p>
+    </div>
+  </div>
+</div>
+
+<!-- Add Product Modal -->
+<div id="addProductModal" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeModal()">&times;</span>
+    <h2>Add New Product</h2>
+    <form method="POST" action="/add-product" enctype="multipart/form-data">
+      <label for="name">Product Name *</label>
+      <input type="text" id="name" name="name" required>
+
+      <label for="description">Description</label>
+      <textarea id="description" name="description"></textarea>
+
+      <label for="price">Price ($)*</label>
+      <input type="number" step="0.01" id="price" name="price" required>
+
+      <label for="stock_quantity">Stock Quantity *</label>
+      <input type="number" id="stock_quantity" name="stock_quantity" required>
+
+      <label for="category">Category</label>
+      <input type="text" id="category" name="category" placeholder="e.g., fruits, vegetables">
+
+      <label for="image">Upload Image</label>
+      <input type="file" id="image" name="image" accept="image/*" required>
+
+      <input type="hidden" id="id" name="id" value="{{farmer[0]}}">
+
+      <button type="submit" class="submit-btn">Add Product</button>
+    </form>
+  </div>
+</div>
+
+<!-- About Farmer Modal -->
+<div id="aboutModal" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeAboutModal()">&times;</span>
+    <h2>Farmer Details</h2>
+    
+    <div class="farmer-details">
+      <p><strong>Farm Name:</strong> {{farmer[3]}}</p>
+      <p><strong>Owner Name:</strong> {{farmer[4]}} {{farmer[5]}}</p>
+      <p><strong>Email:</strong> {{farmer[6]}}</p>
+      <p><strong>Address:</strong> {{farmer[7]}}, {{farmer[8]}}, {{farmer[9]}} {{farmer[10]}}</p>
+      <p><strong>About:</strong> {{farmer[11]}}</p>
+      <p><strong>Member Since:</strong> {{farmer[12]}}</p>
+    </div>
+    
+    <div class="action-buttons">
+      <button class="submit-btn" onclick="closeAboutModal()">Close</button>
+      <button class="logout-btn" onclick="window.location.href='/logout'">Logout</button>
+    </div>
+  </div>
+</div>
+
+{{orders}}
+
+<script>
+  function toggleSidebar() {
+    document.getElementById('sidebar').classList.toggle('open');
+  }
+
+  function showTab(tabName) {
+    const tabs = document.querySelectorAll('.tab-content');
+    const buttons = document.querySelectorAll('.tab-btn');
+    tabs.forEach(tab => tab.classList.remove('active'));
+    buttons.forEach(btn => btn.classList.remove('active'));
+    document.getElementById(tabName).classList.add('active');
+    event.target.classList.add('active');
+  }
+
+  function addToCart(productName) {
+    alert(`Added ${productName} to the cart.`);
+  }
+
+  function openModal() {
+    document.getElementById("addProductModal").style.display = "block";
+  }
+
+  function closeModal() {
+    document.getElementById("addProductModal").style.display = "none";
+  }
+  
+  function openAboutModal() {
+    document.getElementById("aboutModal").style.display = "block";
+  }
+  
+  function closeAboutModal() {
+    document.getElementById("aboutModal").style.display = "none";
+  }
+
+  window.onclick = function(event) {
+    const modal = document.getElementById("addProductModal");
+    const aboutModal = document.getElementById("aboutModal");
+    if (event.target == modal) {
+      modal.style.display = "none";
+    }
+    if (event.target == aboutModal) {
+      aboutModal.style.display = "none";
+    }
+  }
+</script>
+
+</body>
+</html>

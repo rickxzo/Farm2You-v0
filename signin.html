@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Farm2You</title>
+  <style>
+    body {
+      background-color: #f4eac9;
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .outer {
+      display: flex;
+      gap: 32px;
+      margin-top: 35px;
+      justify-content: center;
+      height: 530px;
+    }
+
+    .inner-left, .inner-right {
+      width: 500px;
+      height: 530px;
+      border-radius: 12px;
+    }
+
+    .inner-left {
+      background-color: rgb(5, 59, 26);
+      border-top-right-radius: 0;
+      border-bottom-right-radius: 0;
+      color: white;
+      display: flex;
+      flex-direction: column;
+      padding-left: 25px;
+      width: 38%;
+    }
+
+    .inner-left h1 {
+      font-size: 51px;
+      margin-bottom: 0;
+      margin-top: 20%;
+    }
+
+    .inner-left .subheading {
+      color: #ffdd57;
+      font-size: 17px;
+      margin-bottom: 16px;
+      font-weight: 500;
+    }
+
+    .inner-left .description {
+      font-size: 16px;
+      margin-bottom: 24px;
+      line-height: 1.5;
+    }
+
+    .inner-left ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .inner-left li {
+      font-size: 16px;
+      margin-bottom: 8px;
+      position: relative;
+      padding-left: 20px;
+    }
+
+    .inner-left li::before {
+      content: "✓";
+      position: absolute;
+      left: 0;
+      color: #ffffff;
+    }
+
+    .inner-right {
+      background-color: white;
+      border-top-left-radius: 0;
+      border-bottom-left-radius: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+
+    }
+
+    .tab-wrapper {
+      background-color: #d3d3d3;
+      border-radius: 10px;
+      margin-top: 24px;
+      padding: 4px;
+      display: flex;
+      width: 280px;
+      height: 48px;
+      box-sizing: border-box;
+    }
+
+    .tab {
+      flex: 1;
+      text-align: center;
+      line-height: 40px;
+      cursor: pointer;
+      font-weight: bold;
+      border-radius: 8px;
+      transition: background-color 0.3s;
+      color: #333;
+    }
+
+    .tab.active {
+      background-color: white;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+
+    .modal {
+      flex: 1;
+      padding: 32px;
+      display: none;
+      width: 100%;
+      max-width: 360px;
+    }
+
+    .modal.active {
+      display: block;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="password"],
+    button {
+      width: 100%;
+      padding: 10px;
+      margin-top: 12px;
+      margin-bottom: 16px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 14px;
+    }
+
+    button {
+      background-color: rgb(5, 59, 26);
+      color: white;
+      border: none;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    button:hover {
+      background-color: rgb(3, 45, 20);
+    }
+
+    footer {
+      background-color: rgb(5, 59, 26);
+      color: white;
+      text-align: center;
+      padding: 12px 0;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+  <div class="outer">
+    <div class="inner-left">
+      <h1>Farm2You</h1>
+      <div class="subheading">Connecting farmers directly to customers</div>
+      <div class="description">
+        Join our community of local farmers and conscious<br> consumers. Support sustainable agriculture and enjoy fresh produce delivered directly to your door.
+      </div>
+      <ul>
+        <li>Secure transactions</li>
+        <li>Support local farmers</li>
+        <li>Fresh, organic produce</li>
+      </ul>
+    </div>
+
+    <div class="inner-right">
+      <div class="tab-wrapper">
+        <div class="tab active" onclick="switchTab('signin')">Sign In</div>
+        <div class="tab" onclick="switchTab('signup')">Sign Up</div>
+      </div>
+
+      <div id="signin" class="modal active">
+        <h2>Welcome Back</h2>
+        <form action="/sign-in" method="POST">
+          <input type="email" name="email" placeholder="Email">
+          <input type="password" name="password" placeholder="Password">
+
+          <label style="display: block; margin-bottom: 8px; font-weight: 500;">I am a:</label>
+          <div style="display: flex; gap: 20px; margin-bottom: 16px;">
+            <label>
+              <input type="radio" name="signinUserType" value="farmer" style="margin-right: 6px;">
+              Farmer
+            </label>
+            <label>
+              <input type="radio" name="signinUserType" value="customer" style="margin-right: 6px;">
+              Customer
+            </label>
+          </div>
+
+          <button>Sign In</button>
+        </form>
+      </div>
+
+      <div id="signup" class="modal">
+        <h2>Create an Account</h2>
+        <form action="/sign-up" method="POST">
+          <input type="text" name="name" placeholder="Full Name">
+          <input type="email" name="email" placeholder="Email">
+          <input type="password" name="password" placeholder="Password">
+
+          <label style="display: block; margin-bottom: 8px; font-weight: 500;">I am a:</label>
+          <div style="display: flex; gap: 20px; margin-bottom: 16px;">
+            <label>
+              <input type="radio" name="signupUserType" value="farmer" style="margin-right: 6px;">
+              Farmer
+            </label>
+            <label>
+              <input type="radio" name="signupUserType" value="customer" style="margin-right: 6px;">
+              Customer
+            </label>
+          </div>
+
+          <button>Sign Up</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    © 2024 Farm2You. All rights reserved.
+  </footer>
+
+  <script>
+    function switchTab(tabName) {
+      document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+      document.querySelectorAll('.modal').forEach(modal => modal.classList.remove('active'));
+
+      const tabIndex = tabName === 'signin' ? 0 : 1;
+      document.querySelectorAll('.tab')[tabIndex].classList.add('active');
+      document.getElementById(tabName).classList.add('active');
+    }
+  </script>
+</body>
+</html>

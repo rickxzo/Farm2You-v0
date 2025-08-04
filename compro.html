@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Complete Your Profile - Farm2You</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: #d8f3dc;
+      font-family: 'Segoe UI', sans-serif;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .profile-modal {
+      background-color: white;
+      width: 95%;
+      max-width: 800px;
+      padding: 40px;
+      border-radius: 12px;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+    }
+
+    h2 {
+      margin-top: 0;
+      color: #2d6a4f;
+      text-align: center;
+    }
+
+    .form-section {
+      display: none;
+    }
+
+    .form-section.active {
+      display: block;
+    }
+
+    .form-row {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .form-group {
+      flex: 1;
+      min-width: 200px;
+    }
+
+    label {
+      display: block;
+      margin-top: 15px;
+      font-weight: 500;
+    }
+
+    input, textarea {
+      width: 100%;
+      padding: 8px;
+      margin-top: 5px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      font-size: 14px;
+    }
+
+    button {
+      margin-top: 25px;
+      padding: 10px 20px;
+      background-color: #2d6a4f;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-size: 16px;
+      cursor: pointer;
+      width: 100%;
+    }
+
+    button:hover {
+      background-color: #1b4332;
+    }
+
+    @media screen and (max-width: 600px) {
+      .form-row {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="profile-modal">
+    <h2>Complete Your Profile</h2>
+
+    <!-- Farmer Form -->
+    <div class="form-section {% if user_type == 'farmer' %}active{% endif %}">
+      <form method="POST" action="/complete_profile">
+        <!-- Hidden Fields -->
+        <input type="hidden" name="email" value="{{ email }}">
+        <input type="hidden" name="passwd" value="{{ passwd }}">
+        <input type="hidden" name="user_type" value="farmer">
+        <input type="hidden" name="name" value="{{ name }}">
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="farm_name">Farm Name</label>
+            <input type="text" id="farm_name" name="farm_name" required>
+          </div>
+          <div class="form-group">
+            <label for="established_date">Established Date</label>
+            <input type="date" id="established_date" name="established_date">
+          </div>
+        </div>
+
+        <label for="about">About Your Farm</label>
+        <textarea id="about" name="about" rows="3"></textarea>
+
+        <label for="address1">Address Line 1</label>
+        <input type="text" id="address1" name="address_line1" required>
+
+        <label for="address2">Address Line 2</label>
+        <input type="text" id="address2" name="address_line2">
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="city">City</label>
+            <input type="text" id="city" name="city" required>
+          </div>
+          <div class="form-group">
+            <label for="state">State</label>
+            <input type="text" id="state" name="state" required>
+          </div>
+          <div class="form-group">
+            <label for="pincode">Pincode</label>
+            <input type="text" id="pincode" name="pincode" required>
+          </div>
+        </div>
+
+        <button type="submit">Save Profile</button>
+      </form>
+    </div>
+
+    <!-- Customer Form -->
+    <div class="form-section {% if user_type == 'customer' %}active{% endif %}">
+      <form method="POST" action="/complete_profile">
+        <!-- Hidden Fields -->
+        <input type="hidden" name="email" value="{{ email }}">
+        <input type="hidden" name="passwd" value="{{ passwd }}">
+        <input type="hidden" name="user_type" value="customer">
+        <input type="hidden" name="name" value="{{ name }}">
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="phone">Phone Number</label>
+            <input type="text" id="phone" name="phone_number">
+          </div>
+        </div>
+
+        <label for="address1">Address Line 1</label>
+        <input type="text" id="address1" name="address_line1" required>
+
+        <label for="address2">Address Line 2</label>
+        <input type="text" id="address2" name="address_line2">
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="city">City</label>
+            <input type="text" id="city" name="city" required>
+          </div>
+          <div class="form-group">
+            <label for="state">State</label>
+            <input type="text" id="state" name="state" required>
+          </div>
+          <div class="form-group">
+            <label for="pincode">Pincode</label>
+            <input type="text" id="pincode" name="pincode" required>
+          </div>
+        </div>
+
+        <button type="submit">Save Profile</button>
+      </form>
+    </div>
+
+  </div>
+
+</body>
+</html>

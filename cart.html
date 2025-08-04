@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Farm2You - Cart</title>
+  <link rel="icon" href="/static/farm2you_logo.png" type="image/png">
+  <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;700&family=Josefin+Sans&display=swap" rel="stylesheet">
+
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Ubuntu', sans-serif;
+      background-color: #f9f8f6;
+    }
+
+    .navbar {
+      background-color: #ffffff;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 30px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+
+    .navbar .logo {
+      font-size: 28px;
+      font-weight: 700;
+      color: #3d5a3d;
+      font-family: 'Josefin Sans', sans-serif;
+    }
+
+    .navbar .nav-links a,
+    .navbar .icons a {
+      text-decoration: none;
+      color: #333;
+      margin: 0 10px;
+      font-weight: 500;
+    }
+
+    .navbar .icons img {
+      width: 24px;
+      margin-left: 20px;
+    }
+
+    .shopping-cart-title {
+      font-size: 32px;
+      font-weight: bold;
+      margin: 40px 50px 20px;
+      color: #3e4d3e;
+    }
+
+    .cart-container {
+      display: flex;
+      flex-direction: column;
+      margin-left: 50px;
+    }
+
+    .cart-item {
+      display: flex;
+      background-color: white;
+      border-radius: 10px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+      margin: 15px 0;
+      padding: 15px;
+      width: 60%;
+    }
+
+    .cart-item img {
+      width: 180px;
+      height: 180px;
+      object-fit: cover;
+      border-radius: 10px;
+      margin-right: 20px;
+    }
+
+    .cart-item-details {
+      flex-grow: 1;
+    }
+
+    .cart-item-details h3 {
+      margin: 0 0 10px;
+    }
+
+    .input-row {
+      margin-top: 10px;
+      font-size: 16px;
+    }
+
+    .cart-item-actions {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: flex-end;
+    }
+
+    .cart-item-actions p {
+      font-size: 18px;
+      font-weight: bold;
+      color: #2d2d2d;
+    }
+
+    .remove-btn {
+      background-color: #ff4444;
+      color: white;
+      border: none;
+      padding: 8px 12px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: 500;
+      font-size: 14px;
+      transition: background-color 0.3s;
+    }
+    
+    .remove-btn:hover {
+      background-color: #cc0000;
+    }
+
+    .order-summary {
+      position: absolute;
+      right: 50px;
+      top: 130px;
+      width: 25%;
+      background-color: white;
+      border-radius: 10px;
+      padding: 25px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+    }
+
+    .order-summary h2 {
+      margin: 0 0 15px;
+      font-size: 22px;
+      border-bottom: 1px solid #ccc;
+      padding-bottom: 10px;
+    }
+
+    .order-summary p,
+    .order-summary h3 {
+      font-size: 16px;
+      margin: 8px 0;
+    }
+
+    .checkout-button {
+      background-color: #3d5a3d;
+      color: white;
+      padding: 10px;
+      border-radius: 5px;
+      text-align: center;
+      margin-top: 15px;
+      cursor: pointer;
+      border: none;
+      width: 100%;
+      font-size: 16px;
+    }
+
+    a {
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="navbar">
+    <a class="logo" href="/">Farm2You</a>
+    <div class="nav-links">
+      <a href="/products?category=fruits">Fruits</a>
+      <a href="/products?category=vegetables">Vegetables</a>
+      <a href="/products?category=dairy">Dairy</a>
+    </div>
+    <div class="icons">
+      <a href="/user"><img src="/static/user.png" alt="User"></a>
+      <a href="/cart"><img src="/static/shopping-cart.png" alt="Cart"></a>
+    </div>
+  </div>
+
+  <div class="shopping-cart-title">Your Cart</div>
+  <div class="cart-container">
+    {% for item in items %}
+    <div class="cart-item" data-price="{{ item[2] }}" data-quantity="{{ item[5] }}">
+      <img src="{{ item[4] }}" alt="{{ item[3] }}">
+      <div class="cart-item-details">
+        <h3>{{ item[3] }}</h3>
+        <div class="input-row">Quantity: {{ item[5] }}</div>
+      </div>
+      <div class="cart-item-actions">
+        <p>₹{{ item[2] * item[5] }}</p>
+        <form action="/remove_from_cart" method="POST">
+          <input type="hidden" name="item_id" value="{{ item[0] }}">
+          <button type="submit" class="remove-btn">Remove</button>
+        </form>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+
+  <div class="order-summary">
+    <h2>Order Summary</h2>
+    <p>Total Items: <span id="total-items">0</span></p>
+    <p>Subtotal: ₹<span id="subtotal">0.00</span></p>
+    <p>Shipping: ₹<span id="shipping">0.00</span></p>
+    <p>Estimated Tax: ₹<span id="tax">0.00</span></p>
+    <h3>Total: ₹<span id="total">0.00</span></h3>
+    <form action="/checkout" method="POST">
+      <input type="hidden" name="total_price" id="total_price_input">
+      <input type="hidden" name="subtotal" id="subtotal_input">
+      <input type="hidden" name="tax" id="tax_input">
+      <input type="hidden" name="shipping" id="shipping_input">
+      <input type="hidden" name="total_items" id="total_items_input">
+      <button type="submit" class="checkout-button">Proceed to Checkout</button>
+    </form>
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      function updateOrderSummary() {
+        let totalItems = 0;
+        let subtotal = 0;
+
+        document.querySelectorAll(".cart-item").forEach(item => {
+          const price = parseFloat(item.getAttribute('data-price'));
+          const quantity = parseInt(item.getAttribute('data-quantity'));
+          totalItems += quantity;
+          subtotal += price * quantity;
+        });
+
+        const shipping = subtotal * 0.05;
+        const tax = subtotal * 0.18;
+        const total = subtotal + shipping + tax;
+
+        // Update displayed values
+        document.getElementById("total-items").textContent = totalItems;
+        document.getElementById("subtotal").textContent = subtotal.toFixed(2);
+        document.getElementById("shipping").textContent = shipping.toFixed(2);
+        document.getElementById("tax").textContent = tax.toFixed(2);
+        document.getElementById("total").textContent = total.toFixed(2);
+
+        // Update hidden form inputs
+        document.getElementById("total_price_input").value = total.toFixed(2);
+        document.getElementById("subtotal_input").value = subtotal.toFixed(2);
+        document.getElementById("tax_input").value = tax.toFixed(2);
+        document.getElementById("shipping_input").value = shipping.toFixed(2);
+        document.getElementById("total_items_input").value = totalItems;
+      }
+
+      // Initial calculation
+      updateOrderSummary();
+
+      // Handle item removal
+      document.querySelector(".cart-container").addEventListener("click", event => {
+        if (event.target.classList.contains('remove-btn')) {
+          event.preventDefault();
+          const form = event.target.closest("form");
+          const itemId = form.querySelector("input[name='item_id']").value;
+          
+          // Send removal request to server
+          fetch(form.action, {
+            method: 'POST',
+            body: new URLSearchParams(new FormData(form)),
+            headers: {
+              'Content-Type': 'application/x-www-form-urlencoded',
+            }
+          })
+          .then(response => {
+            if (response.ok) {
+              form.closest(".cart-item").remove();
+              updateOrderSummary();
+            }
+          });
+        }
+      });
+    });
+  </script>
+</body>
+</html>

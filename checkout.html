@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Checkout</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"/>
+  <link rel="icon" type="image/png" href="/static/globe.png"/>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+
+    .checkout-header {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      position: relative;
+      margin-top: 17px;
+    }
+
+    .checkout-header a {
+      text-decoration: none;
+      color: grey;
+      font-size: 14px;
+      position: absolute;
+      left: 31px;
+    }
+
+    .checkout-header h1 {
+      margin: 0;
+      font-size: 32px;
+    }
+    .content{
+        height: 500px;
+        width: 95%;
+        margin-left: 2.5%;
+        margin-top: 10px;
+        display: flex;
+    }
+    .billing{
+        height: 145%;
+        width: 65%;
+    }
+    .order{
+        height: 46%;
+        width: 30%;
+        border: 1px solid rgb(227, 227, 227);
+        border-radius: 6px;
+        margin-left: 5%;
+    }
+    .toggle{
+        height: 5.4%;
+        width: 100%;
+        display: flex;
+        background-color: #f3f2f2;
+        overflow: hidden;
+        border-radius: 6px;
+    }
+    .toggle button {
+        flex: 1;
+        border: none;
+        background-color: #f3f2f2;
+        color: black;
+        cursor: pointer;
+        font-size: 14px;
+        border-radius: 3px;
+        font-weight: lighter;
+        margin:3.5px;
+
+    }
+    .toggle button.active {
+        background-color: #ffffff;
+        font-weight: bold;
+    }
+    .info{
+        height: 86%;
+        width: 100%;
+        margin-top: 4%;
+    }
+    .info-box{
+        border: 1px solid rgb(229, 229, 229);
+        border-radius: 10px;
+        height: 100%;
+        padding-left: 20px;
+    }
+    .info-box2{
+        border: 1px solid rgb(229,229,229);
+        border-radius: 10px;
+        height: 45%;
+        padding-left: 20px;
+    }
+        
+        
+    
+  </style>
+  <script>
+    function showSection(section) {
+            document.getElementById('shipping-info').style.display = section === 'shipping' ? 'block' : 'none';
+            document.getElementById('payment-info').style.display = section === 'payment' ? 'block' : 'none';
+            document.getElementById('shipping-btn').classList.toggle('active', section === 'shipping');
+            document.getElementById('payment-btn').classList.toggle('active', section === 'payment');
+        }
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
+  <script>
+
+    function closeModals() {
+      document.getElementById("cod-modal").style.display = "none";
+      document.getElementById("upi-modal").style.display = "none";
+    }
+  
+    document.addEventListener('DOMContentLoaded', () => {
+      const codRadio = document.querySelector('input[value="cod"]');
+      const upiRadio = document.querySelector('input[value="upi"]');
+  
+      codRadio.addEventListener('click', () => {
+        document.getElementById("cod-modal").style.display = "flex";
+      });
+  
+      upiRadio.addEventListener('click', () => {
+        document.getElementById("upi-modal").style.display = "flex";
+        const canvas = document.getElementById('qrcode');
+        const totalText = document.getElementById('total-amount').textContent;
+        const totalAmount = totalText.replace(/[^\d.]/g, '');
+        console.log(totalAmount)
+        const upiURL = `upi://pay?pa=9477510656@ptyes&pn=Gourav+Jana&am=${totalAmount}&cu=INR`;
+        console.log(upiURL)
+        if (canvas) {
+            QRCode.toCanvas(canvas, upiURL, function (error) {
+                if (error) console.error(error);
+                else console.log("QR Code generated successfully!");
+            });
+        }
+      });
+    });
+  </script>
+  <script>
+    window.addEventListener('DOMContentLoaded', () => {
+      const inputs = document.querySelectorAll('#shipping-info input, #shipping-info select');
+      const proceedBtn = document.getElementById('proceed-btn');
+  
+      function checkInputs() {
+        let allFilled = true;
+  
+        inputs.forEach(input => {
+          const value = input.value.trim();
+          
+          // Special case: phone should be more than just +91
+          if (input.id === 'phone' && value === '+91') {
+            allFilled = false;
+          } else if (value === '') {
+            allFilled = false;
+          }
+        });
+  
+        proceedBtn.disabled = !allFilled;
+        proceedBtn.style.opacity = allFilled ? '1' : '0.5';
+        proceedBtn.style.cursor = allFilled ? 'pointer' : 'not-allowed';
+      }
+  
+      inputs.forEach(input => {
+        input.addEventListener('input', checkInputs);
+      });
+  
+      // Initial check on load
+      checkInputs();
+    });
+  </script>
+  <script>
+    function getInputs() {
+        const first_name = document.getElementById("first-name").value;
+        const last_name = document.getElementById("last-name").value;
+        const email = document.getElementById("email").value;
+        const address = document.getElementById('address').value;
+        const city = document.getElementById("city").value;
+        const state = document.getElementById("state").value;
+        const phone = document.getElementById("phone").value;
+        const country = document.getElementById("country").value;
+        const postal_code = document.getElementById("postal-code").value;
+
+        console.log(phone);
+
+        document.getElementById("first_name_input").value = first_name;
+        document.getElementById("last_name_input").value = last_name;
+        document.getElementById("email_input").value = email;
+        document.getElementById("address_input").value = address;
+        document.getElementById("city_input").value = city;
+        document.getElementById("state_input").value = state;
+        document.getElementById("country_input").value = country;
+        document.getElementById("phone_input").value = phone;
+        document.getElementById("postal_input").value = postal_code;
+
+        document.getElementById("first_name_input2").value = first_name;
+        document.getElementById("last_name_input2").value = last_name;
+        document.getElementById("email_input2").value = email;
+        document.getElementById("address_input2").value = address;
+        document.getElementById("city_input2").value = city;
+        document.getElementById("state_input2").value = state;
+        document.getElementById("country_input2").value = country;
+        document.getElementById("phone_input2").value = phone;
+        document.getElementById("postal_input2").value = postal_code;
+
+        console.log("input");
+        console.log(document.getElementById("phone_input").value)
+        console.log("end input")
+
+
+    }
+  </script>
+  
+  
+</head>
+<body>
+  <div class="checkout-header">
+    <a href="/cart">&larr; Back to Cart</a>
+    <h1>Checkout</h1>
+  </div>
+
+  <div class="content">
+    <div class="billing">
+        <div class="toggle">
+            <button id="shipping-btn" class="active" onclick="showSection('shipping')">Shipping</button>
+            <button id="payment-btn">Payment</button>
+            <!--<button id="review-btn" onclick="showSection('review')">Review</button>-->
+        </div>
+        <div class="info">
+            <div id="shipping-info" class="info-box" style="display: block;">
+                <h2 style="margin-bottom: 5px; font-size: 24px;">Shipping Information</h2>
+                <p style="margin-top: 7px; margin-left: 1px; font-size: 14px; color: grey;">Enter your shipping address details</p>
+                <div style="display: flex; gap: 10px; margin-top: 20px;">
+                    <div style="flex: 1;">
+                      <label for="first-name" style="display: block; font-size: 14px; margin-bottom: 5px;">First Name</label>
+                      <input type="text" id="first-name" name="first-name" style="width: 85%; padding: 8px; font-size: 14px; border: 1px solid #ccc; border-radius: 4px;">
+                    </div>
+                    <div style="flex: 1;">
+                      <label for="last-name" style="display: block; font-size: 14px; margin-bottom: 5px;">Last Name</label>
+                      <input type="text" id="last-name" name="last-name" style="width: 85%; padding: 8px; font-size: 14px; border: 1px solid #ccc; border-radius: 4px;">
+                    </div>
+                </div>
+                <div style="margin-top: 20px;">
+                    <label for="email" style="display: block; font-size: 14px; margin-bottom: 5px;">Email</label>
+                    <input type="email" id="email" name="email" style="width: 92.5%; padding: 8px; font-size: 14px; border: 1px solid #ccc; border-radius: 4px;">
+                </div>
+                <div style="margin-top: 20px;">
+                    <label for="address" style="display: block; font-size: 14px; margin-bottom: 5px;">Address</label>
+                    <input type="text" id="address" name="address" placeholder="Street address, P.O. box, company name, c/o" style="width: 92.5%; padding: 8px; font-size: 14px; border: 1px solid #ccc; border-radius: 4px;">
+                </div>
+                <div style="display: flex; gap: 10px; margin-top: 20px;">
+                    <div style="flex: 1;">
+                      <label for="city" style="display: block; font-size: 14px; margin-bottom: 5px;">City</label>
+                      <input type="text" id="city" name="city" style="width: 85%; padding: 8px; font-size: 14px; border: 1px solid #ccc; border-radius: 4px;">
+                    </div>
+                    <div style="flex: 1;">
+                      <label for="state" style="display: block; font-size: 14px; margin-bottom: 5px;">State / Province</label>
+                      <input type="text" id="state" name="state" style="width: 85%; padding: 8px; font-size: 14px; border: 1px solid #ccc; border-radius: 4px;">
+                    </div>
+                </div>
+                <div style="display: flex; gap: 10px; margin-top: 20px;">
+                    <div style="flex: 1;">
+                      <label for="postal-code" style="display: block; font-size: 14px; margin-bottom: 5px;">Postal Code</label>
+                      <input type="text" id="postal-code" name="postal-code" style="width: 85%; padding: 8px; font-size: 14px; border: 1px solid #ccc; border-radius: 4px;">
+                    </div>
+                    <div style="flex: 1;">
+                      <label for="country" style="display: block; font-size: 14px; margin-bottom: 5px;">Country</label>
+                      <select id="country" name="country" style="width: 89.5%; padding: 8px; font-size: 14px; border: 1px solid #ccc; border-radius: 4px;">
+                        <option value="india" selected>India</option>
+                      </select>
+                    </div>
+                </div>
+                <div style="margin-top: 20px;">
+                    <label for="phone" style="display: block; font-size: 14px; margin-bottom: 5px;">Phone Number</label>
+                    <input type="tel" id="phone" name="phone" value="+91" style="width: 92.5%; padding: 8px; font-size: 14px; border: 1px solid #ccc; border-radius: 4px;">
+                </div>
+                <div style="display: flex; justify-content: flex-end; margin-top: 35px; margin-right: 37.5px;">
+                    <button 
+                    id="proceed-btn"
+                    onclick="showSection('payment')" 
+                    disabled
+                    style="background-color: black; color: white; padding: 10px 20px; font-size: 14px; border: none; border-radius: 4px; cursor: not-allowed; opacity: 0.5;">
+                    Proceed to Payment
+                    </button>
+
+                </div>
+                  
+                  
+            </div>
+            <div id="payment-info" class="info-box2" style="display: none;">
+                <h2 style="margin-bottom: 5px; font-size: 24px;">Payment Information</h2>
+                <p style="margin-top: 7px; font-size: 14px; color: grey;">Select your preferred payment method</p>
+                <div style="border: 1px solid #ccc; padding: 15px; border-radius: 6px; margin-top: 30px; width: 90%;">
+                    <label style="font-size: 14px;">
+                      <input type="radio" name="payment-method" id="payment-method" value="cod" style="margin-right: 8px;">
+                      Cash on Delivery
+                    </label>
+                </div>
+                
+                  <!-- Online UPI Box -->
+                <div style="border: 1px solid #ccc; padding: 15px; border-radius: 6px; margin-top: 20px; width: 90%;">
+                    <label style="font-size: 14px;">
+                      <input type="radio" name="payment-method" id="payment-method" value="upi" style="margin-right: 8px;">
+                      Online UPI
+                    </label>
+                </div>
+            </div>    
+        </div>
+    </div>
+    <div class="order">
+        <h2 style="font-size: 26px; margin: 20px; margin-bottom: 10px;">Order Summary</h2>
+        <div style="padding: 0 20px; font-size: 14px;">
+            <div style="display: flex; justify-content: space-between; margin-bottom: 10px; margin-top: 30px;">
+              <span style="font-size: 16px;">Subtotal</span>
+              <span style="font-size: 16px;">₹ {{subtotal}}</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+              <span style="font-size: 16px;">Shipping</span>
+              <span style="font-size: 16px;">₹ {{shipping}}</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; padding-bottom: 12px; margin-bottom: 10px; border-bottom: 1px solid rgb(203, 203, 203);">
+              <span style="font-size: 16px;">Tax</span>
+              <span style="font-size: 16px;">₹ {{tax}}</span>
+            </div>
+        </div>
+        <div style="display: flex; justify-content: space-between; margin: 21px; font-weight: bold;">
+            <span>Total</span>
+            <span id="total-amount">₹ {{total}}</span>
+        </div>
+    </div>
+  </div>
+<!-- COD Modal -->
+<div id="cod-modal" style="display: none; position: fixed; top: 0; left: 0; height: 100%; width: 100%; background: rgba(0,0,0,0.4); z-index: 999; justify-content: center; align-items: center;">
+    <div style="background: white; padding: 30px; border-radius: 8px; width: 400px; text-align: center; position: relative;">
+      <span onclick="closeModals()" style="position: absolute; top: 10px; right: 15px; font-size: 20px; cursor: pointer;">&times;</span>
+      <h3>Cash on Delivery</h3>
+      <p>Our delivery agent is excited to meet you! Please keep the exact amount ready to ensure a smooth and quick delivery experience.</p>
+      <form action="/order">
+        <input type="hidden" name="first-name" id="first_name_input2">
+        <input type="hidden" name="last-name" id="last_name_input2">
+        <input type="hidden" name="email" id="email_input2">
+        <input type="hidden" name="address" id="address_input2">
+        <input type="hidden" name="city" id="city_input2">
+        <input type="hidden" name="state" id="state_input2">
+        <input type="hidden" name="postal-code" id="postal_input2">
+        <input type="hidden" name="country" id="country_input2">
+        <input type="hidden" name="phone" id="phone_input2">
+        <input type="hidden" name="amount" id="amount_input2" value="{{total}}">
+        <input type="hidden" name="payment" id="payment_input" value="cod">
+        <button onclick="getInputs()" style="margin-top: 20px; padding: 10px 20px; background: black; color: white; border: none; border-radius: 4px;">Place Order</button>
+      </form>
+    </div>
+</div>
+  
+  
+  
+  <!-- UPI Modal -->
+<!-- UPI Modal -->
+<div id="upi-modal" style="display: none; position: fixed; top: 0; left: 0; height: 100%; width: 100%; background: rgba(0,0,0,0.4); z-index: 999; justify-content: center; align-items: center;">
+    <div style="background: white; padding: 30px; border-radius: 8px; width: 400px; text-align: center; position: relative;">
+      <span onclick="closeModals()" style="position: absolute; top: 10px; right: 15px; font-size: 20px; cursor: pointer;">&times;</span>
+      <h3>Online UPI</h3>
+      <p>Use your UPI app to complete the payment at the next step.</p>
+      <canvas id="qrcode"></canvas><br>
+      <label>Transaction ID</label><br>
+      <form action="/order">
+        <input type="hidden" name="first-name" id="first_name_input">
+        <input type="hidden" name="last-name" id="last_name_input">
+        <input type="hidden" name="email" id="email_input">
+        <input type="hidden" name="address" id="address_input">
+        <input type="hidden" name="city" id="city_input">
+        <input type="hidden" name="state" id="state_input">
+        <input type="hidden" name="postal-code" id="postal_input">
+        <input type="hidden" name="country" id="country_input">
+        <input type="hidden" name="phone" id="phone_input">
+        <input type="hidden" name="payment" id="payment_input" value="upi">
+        <input type="hidden" name="amount" id="amount_input" value="{{total}}">
+        <input type="text" id="tid" class="tid" name="tid" style="margin-top: 8px; padding: 8px; width: 90%; border-radius: 4px; border: 1px solid #ccc;" required><br>
+        <button onclick="getInputs()" style="margin-top: 20px; padding: 10px 20px; background: black; color: white; border: none; border-radius: 4px;">Place Order</button>
+      </form>
+    </div>
+</div>
+  
+  
+</body>
+</html>

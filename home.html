@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Farm2Go</title>
+  <link rel="icon" type="image/png" href="/static/icon-192.png">
+  <link rel="manifest" href="{{ url_for('static', filename='manifest.json') }}">
+  <meta name="theme-color" content="#4CAF50">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400..700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Underdog&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --green: #1e6521;
+      --yellow: rgb(239, 181, 20);
+      --dark-green: #09360c;
+      --light-gray: #f9f9f9;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+      overflow-x: hidden;
+    }
+
+    /* Navbar */
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem;
+      background-color: white;
+      border-bottom: 1px solid #ddd;
+      color: var(--green);
+    }
+
+    .navbar-title {
+      font-family: 'Underdog';
+      font-size: 1.8rem;
+      color: var(--green);
+    }
+
+    .nav-links, .nav-right {
+      display: none;
+    }
+
+    .hamburger {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      cursor: pointer;
+    }
+
+    .hamburger div {
+      width: 25px;
+      height: 3px;
+      background-color: var(--green);
+    }
+
+    /* Sidebar */
+    .sidebar {
+      position: fixed;
+      top: 0;
+      right: 0;
+      width: 250px;
+      height: 100%;
+      background: white;
+      padding-top: 60px;
+      box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
+      display: none;
+      flex-direction: column;
+      gap: 1.5rem;
+      padding-left: 1.5rem;
+      transition: transform 0.3s ease;
+      transform: translateX(100%);
+      z-index: 999;
+    }
+
+    .sidebar.open {
+      display: flex;
+      transform: translateX(0);
+    }
+
+    .sidebar a {
+      color: var(--green);
+      text-decoration: none;
+      font-size: 1.2rem;
+    }
+
+    .close-btn {
+      position: absolute;
+      top: 15px;
+      right: 20px;
+      font-size: 24px;
+      color: var(--green);
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    /* Hero Section */
+    .hero {
+      height: 90vh;
+      background: url('https://images.unsplash.com/photo-1464226184884-fa280b87c399?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80') center/cover no-repeat;
+      position: relative;
+    }
+
+    .overlay {
+      width: 100%;
+      height: 100%;
+      background: rgba(26, 43, 26, 0.75);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 2rem 1.5rem;
+    }
+
+    .hero-content {
+      color: white;
+      animation: fadeIn 1.5s ease forwards;
+      opacity: 0;
+      max-width: 700px;
+    }
+
+    .hero-content h1 {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+    }
+
+    .hero-content p {
+      font-size: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .hero-buttons a {
+      display: inline-block;
+      margin-right: 1rem;
+      padding: 0.75rem 1.2rem;
+      font-size: 1rem;
+      border-radius: 5px;
+      text-decoration: none;
+      font-weight: 600;
+      transition: background 0.3s ease;
+    }
+
+    .shop-btn {
+      background: white;
+      color: var(--green);
+    }
+
+    .shop-btn:hover {
+      background: #cdcdcd;
+    }
+
+    .farmer-btn {
+      background: var(--yellow);
+      color: rgb(9, 57, 22);
+    }
+
+    .farmer-btn:hover {
+      background: #9e7b29;
+    }
+
+    /* Why Choose */
+    .why-choose {
+      background: var(--light-gray);
+      padding: 3rem 1.5rem;
+      text-align: center;
+    }
+
+    .why-choose h2 {
+      font-size: 1.5rem;
+      color: var(--green);
+    }
+
+    .why-choose p {
+      font-size: 1rem;
+      color: #555;
+      max-width: 700px;
+      margin: 1rem auto 0;
+      line-height: 1.6;
+      font-style: italic;
+    }
+
+    /* Features */
+    .features {
+      background: var(--light-gray);
+      display: flex;
+      flex-direction: column;
+      padding: 2rem 1.5rem;
+      gap: 1.5rem;
+    }
+
+    .feature-box {
+      background: #034531;
+      color: #dff2b4;
+      padding: 1.5rem;
+      border-radius: 10px;
+      text-align: center;
+      transition: transform 0.3s ease;
+    }
+
+    .feature-box:hover {
+      transform: translateY(-8px);
+    }
+
+    .feature-box h3 {
+      font-size: 1.1rem;
+      margin-bottom: 0.8rem;
+    }
+
+    .feature-box p {
+      font-size: 0.9rem;
+      line-height: 1.5;
+    }
+
+    /* Footer */
+    .footer {
+      background: var(--dark-green);
+      color: #ccc;
+      padding: 1.5rem;
+      text-align: center;
+      font-size: 0.9rem;
+    }
+
+    .footer-top {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    a{
+        text-decoration: none;
+        color: inherit;
+    }
+
+    @keyframes fadeIn {
+      to {
+        opacity: 1;
+      }
+    }
+
+    @media (min-width: 768px) {
+      .nav-links, .nav-right {
+        display: flex;
+        gap: 1.2rem;
+      }
+
+      .hamburger {
+        display: none;
+      }
+
+      .hero-content h1 {
+        font-size: 2.5rem;
+      }
+
+      .hero-content p {
+        font-size: 1.2rem;
+      }
+
+      .features {
+        flex-direction: row;
+        justify-content: space-between;
+        flex-wrap: wrap;
+      }
+
+      .feature-box {
+        flex: 1;
+        min-width: 250px;
+      }
+
+      .footer-top {
+        flex-direction: row;
+        justify-content: space-between;
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+    }
+  </style>
+  <script>
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker.register("/static/service-worker.js")
+        .then(() => console.log("Service Worker registered!"));
+    }
+  </script>
+  
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav class="navbar">
+    <div class="navbar-title">Farm2Go</div>
+    <div class="nav-links">
+      <a href="/">Home</a>
+      <a href="/products">Products</a>
+      <a href="/farmer-dashboard">Farmer Dashboard</a>
+    </div>
+    <div class="nav-right">
+      <a href="/cart">Cart</a>
+      <a href="/user">User</a>
+    </div>
+    <div class="hamburger" onclick="toggleSidebar()">
+      <div></div><div></div><div></div>
+    </div>
+  </nav>
+
+  <!-- SIDEBAR -->
+  <div class="sidebar" id="sidebar">
+    <div class="close-btn" onclick="toggleSidebar()">&times;</div>
+    <a href="/">Home</a>
+    <a href="/products">Products</a>
+    <a href="/farmer-dashboard">Farmer Dashboard</a>
+    <a href="/orders">Orders</a>
+    <a href="/cart">Cart</a>
+    <a href="/user">User</a>
+  </div>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="overlay">
+      <div class="hero-content">
+        <h1>From Farm to Table, Directly to You</h1>
+        <p>Support local farmers and get the freshest produce. No middlemen, just pure farm-fresh goodness.</p>
+        <div class="hero-buttons">
+          <a href="/products" class="shop-btn">Shop Now</a>
+          <a href="/farmer-dashboard" class="farmer-btn">I'm a Farmer</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- WHY CHOOSE -->
+  <section class="why-choose">
+    <h2>Why Choose Farm2Go?</h2>
+    <p>We're dedicated to transforming how people access fresh local food while ensuring farmers get the income they deserve.</p>
+  </section>
+
+  <!-- FEATURES -->
+  <section class="features">
+    <div class="feature-box">
+      <h3>Fresh & Local</h3>
+      <p>Connect directly with local farmers for the freshest produce available.</p>
+    </div>
+    <div class="feature-box">
+      <h3>Better Income for Farmers</h3>
+      <p>By eliminating middlemen, farmers earn more while consumers pay fair prices.</p>
+    </div>
+    <div class="feature-box">
+      <h3>Community Support</h3>
+      <p>Know who grows your food and build relationships with local producers.</p>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer-top">
+      <div>Connecting farms and tables since 2025</div>
+      <div>© 2025 Farm2Go. All rights reserved.</div>
+    </div>
+  </footer>
+
+  <script>
+    function toggleSidebar() {
+      document.getElementById('sidebar').classList.toggle('open');
+    }
+  </script>
+
+</body>
+</html>

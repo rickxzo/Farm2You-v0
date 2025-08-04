@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="google-adsense-account" content="ca-pub-9855269643883057">
+    <title>Farm2You</title>
+    <link rel="icon" type="image/png" href="/static/icon-192.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="icon" type="image/png" href="/static/globe.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Karla:wght@200..800&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Rubik+Marker+Hatch&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Winky+Sans:ital,wght@0,300..900;1,300..900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400..700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Boldonse&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap" rel="stylesheet">
+    <style>
+        body{
+            margin: 0;
+            padding: 0;
+            background-color: white;
+        }
+        .nav{
+            padding: 12px;
+            display: flex;
+        }
+        .nav-left{
+            padding-left: 12px;
+            width: 20%;
+        }
+        .nav-left h1{
+            margin-bottom: 8px;
+        }
+        .sub{
+            color: rgb(122, 122, 122);
+            font-size: 20px;
+            margin-top: 0;
+        }
+        .nav-right{
+            display: flex;
+            margin-left: 60.5%;
+            width: 20%;
+        }
+        .status {
+            display: inline-block;
+            padding-top: 10px;
+            padding-left: 12px;
+            padding-right: 12px;
+            padding-bottom: 3px;
+            border-radius: 20px;
+            font-size: 18px;
+            font-weight: 500;
+            color: white;
+            background-color: gray; /* Default background */
+            height: 30px;
+            margin-top: 14%;
+        }
+
+        .status.pending {
+            background-color: orange;
+        }
+
+        .status.shipped {
+            background-color: #007bff;
+        }
+
+        .status.delivered {
+            background-color: green;
+        }
+
+        .status.cancelled {
+            background-color: red;
+        }
+        .help {
+            bottom: 30px;
+            right: 30px;
+            background-color: #000;
+            color: #fff;
+            padding: 12px 18px;
+            border: none;
+            border-radius: 30px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+            transition: background-color 0.3s ease;
+            height: 42px;
+            margin-top: 14%;
+            margin-left: 10%;
+        }
+
+        .help:hover {
+            background-color: #333;
+        }
+        .main{
+            /*height: 1000px;*/
+            width: 95.7%;
+            margin-left: 2%;
+            margin-top: 18px;
+            display: flex;
+            align-items: flex-start;
+        }
+        .right{
+            height: 100%;
+            width:30%;
+            margin-left: 3%;
+        }
+        .payment{
+            height: 25%;
+            width: 88.5%;
+            border:1px solid rgb(232, 232, 232);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+        }
+        .shipping{
+            height: 30%;
+            width: 100%;
+            margin-top:7%;
+            border:1px solid rgb(232, 232, 232);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+        }
+        .customer{
+            height: 30%;
+            width: 100%;
+            margin-top:7%;
+            border:1px solid rgb(232, 232, 232);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+        }
+        .name{
+            margin-right: 60%;
+            margin-top: 50%;
+        }
+        .t-name{
+            margin-right: 60%;
+        }
+        .payment {
+            padding: 20px;
+            font-family: 'Ubuntu', sans-serif;
+            background-color: #fff;
+            padding-top: 0;
+        }
+
+        .payment-line {
+            display: flex;
+            justify-content: space-between;
+            padding: 6px 0;
+            font-size: 16px;
+            margin-top:5px;
+        }
+
+        .payment-line.total {
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        .label {
+            color: #444;
+        }
+
+        .value {
+            color: #222;
+        }
+        .shipping {
+            height: 27%;
+            width: 100%;
+            margin-top: 7%;
+            border: 1px solid rgb(232, 232, 232);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            background-color: #fff;
+            padding-bottom: 16px;
+            font-family: 'Ubuntu', sans-serif;
+        }
+
+        .shipping h2 {
+            font-size: 20px;
+            margin: 0;
+            margin-top:13px;
+            padding-left: 20px;
+            font-weight: 600;
+        }
+
+        .shipping .payment-line {
+            display: flex;
+            justify-content: space-between;
+            padding: 6px 20px;
+            font-size: 16px;
+        }
+
+        .shipping .label {
+            color: #444;
+            font-weight: 500;
+        }
+
+        .shipping .value {
+            color: #222;
+        }
+
+        .customer {
+            height: auto;
+            width: 100%;
+            margin-top: 7%;
+            border: 1px solid rgb(232, 232, 232);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            background-color: #fff;
+            padding-bottom: 16px;
+            font-family: 'Ubuntu', sans-serif;
+        }
+
+        .customer h2 {
+            font-size: 20px;
+            margin: 0;
+            padding-top: 12px;
+            padding-left: 20px;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+
+        .customer .payment-line {
+            display: flex;
+            justify-content: space-between;
+            padding: 6px 20px;
+            font-size: 16px;
+        }
+
+        .customer .label {
+            color: #444;
+            font-weight: 500;
+        }
+
+        .customer .value {
+            color: #222;
+        }
+        .left {
+            width: 67%;
+            border-radius: 10px;
+            border: 1px solid rgb(232, 232, 232);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            background-color: #fff;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .order-item {
+            display: flex;
+            align-items: center;
+            padding: 16px 0;
+            border-bottom: 1px solid #eee;
+            font-family: 'Ubuntu', sans-serif;
+        }
+
+        .order-item:last-child {
+            border-bottom: none;
+        }
+
+        .order-item img {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-right: 20px;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .order-item-details {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .order-item-details h3 {
+            margin: 0;
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .order-item-details p {
+            margin: 4px 0;
+            font-size: 14px;
+            color: #555;
+        }
+
+        .modal {
+          display: none;
+          position: fixed;
+          z-index: 1000;
+          padding-top: 100px;
+          left: 0;
+          top: 0;
+          width: 100%;
+          height: 100%;
+          overflow: auto;
+          background-color: rgba(0,0,0,0.5);
+        }
+
+        .modal-content {
+          background-color: #fff;
+          margin: auto;
+          padding: 30px;
+          border-radius: 10px;
+          width: 400px;
+          position: relative;
+        }
+
+        .close {
+          color: #aaa;
+          position: absolute;
+          right: 20px;
+          top: 15px;
+          font-size: 28px;
+          font-weight: bold;
+          cursor: pointer;
+        }
+
+        input, textarea {
+          width: 100%;
+          padding: 10px;
+          margin-top: 10px;
+          margin-bottom: 20px;
+          border: 1px solid #ccc;
+          border-radius: 6px;
+        }
+
+        .send-button {
+          padding: 10px 20px;
+          background-color: #111;
+          color: #fff;
+          border: none;
+          border-radius: 6px;
+          cursor: pointer;
+        }
+
+    </style>
+
+
+
+</head>
+<body>
+    <div class="nav">
+        <div class="nav-left">
+            <h1>Order Details</h1>
+            <p class="sub">Order #{{details[0]}} | {{details[15]}}</p>
+        </div>
+        <div class="nav-right">
+            <div class="status {{ details[13]|lower }}">
+                {{details[12]}}
+            </div>
+            <button class="help">Need help?</button>
+        </div>
+    </div>
+    <div class="main">
+        <div class="left">
+            {% for item in items %}
+            <div class="order-item">
+                <img src="{{ item[2] }}" alt="{{ item[1] }}">
+                <div class="order-item-details">
+                    <h3>{{ item[1] }}</h3>
+                    <p>Quantity: <strong>{{ item[3] }}</strong></p>
+                    <p style="color: #999;">Product ID: {{ item[0] }}</p>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <div class="right">
+            <div class="payment">
+                <h2 style="padding-top: 12px;">Payment Summary</h2>
+                <div class="payment-line">
+                    <span class="label">Subtotal</span>
+                    <span class="value" id="subtotal">₹--</span>
+                </div>
+                <div class="payment-line">
+                    <span class="label">Shipping</span>
+                    <span class="value" id="shipping">₹--</span>
+                </div>
+                <div class="payment-line">
+                    <span class="label">Tax</span>
+                    <span class="value" id="tax">₹--</span>
+                </div>
+                <hr style="margin: 12px 0;">
+                <div class="payment-line total">
+                    <span class="label">Total</span>
+                    <span class="value" id="total">₹{{details[13]}}</span>
+                </div>
+            </div>
+
+
+            <div class="shipping">
+                <h2 style="padding: 20px 20px 10px;">Shipping Information</h2>
+                <div class="payment-line" style="padding: 4px 20px;">
+                    <span class="label">Name</span>
+                    <span class="value" id="ship-name">{{details[3]}} {{details[4]}}</span>
+                </div>
+                <div class="payment-line" style="padding: 4px 20px;">
+                    <span class="label">Address</span>
+                    <span class="value" id="ship-address">{{details[6]}}</span>
+                </div>
+                <div class="payment-line" style="padding: 4px 20px;">
+                    <span class="label">City</span>
+                    <span class="value" id="ship-city">{{details[7]}}</span>
+                </div>
+                <div class="payment-line" style="padding: 4px 20px;">
+                    <span class="label">State</span>
+                    <span class="value" id="ship-state">{{details[8]}}</span>
+                </div>
+                <div class="payment-line" style="padding: 4px 20px;">
+                    <span class="label">Country</span>
+                    <span class="value" id="ship-country">{{details[10]}}</span>
+                </div>
+                <div class="payment-line" style="padding: 4px 20px;">
+                    <span class="label">Pincode</span>
+                    <span class="value" id="ship-pincode">{{details[9]}}</span>
+                </div>
+            </div>
+
+            <div class="customer">
+                <h2 style="padding-top: 12px; padding-left: 20px;">Customer Information</h2>
+                <div class="payment-line">
+                    <span class="label">Name</span>
+                    <span class="value">{{details[3]}} {{details[4]}}</span>
+                </div>
+                <div class="payment-line">
+                    <span class="label">Email</span>
+                    <span class="value">{{details[5]}}</span>
+                </div>
+                <div class="payment-line">
+                    <span class="label">Phone</span>
+                    <span class="value">{{details[11]}}</span>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <!-- Help Modal -->
+    <div id="helpModal" class="modal">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>Report an Issue</h2>
+        <form action="/send_issue" method="POST">
+          <label for="order_id">Order ID</label>
+          <input type="text" name="order_id" id="order_id" value="{{ order_id }}" required>
+
+          <label for="message">Message</label>
+          <textarea name="message" id="message" rows="4" required></textarea>
+
+          <button type="submit" class="send-button">Send</button>
+        </form>
+      </div>
+    </div>
+
+    <script>
+        window.onload = function () {
+            const total = parseFloat("{{details[13]}}");
+            const subtotal = total / 1.23; // since 5% + 18% = 23%, divide to get original
+            const shipping = subtotal * 0.05;
+            const tax = subtotal * 0.18;
+
+            document.getElementById("subtotal").innerText = `₹${subtotal.toFixed(2)}`;
+            document.getElementById("shipping").innerText = `₹${shipping.toFixed(2)}`;
+            document.getElementById("tax").innerText = `₹${tax.toFixed(2)}`;
+
+            const modal = document.getElementById("helpModal");
+            const btn = document.querySelector(".help");
+            const span = document.querySelector(".close");
+
+            btn.onclick = function () {
+                modal.style.display = "block";
+            }
+
+            span.onclick = function () {
+                modal.style.display = "none";
+            }
+
+            window.onclick = function (event) {
+                if (event.target == modal) {
+                    modal.style.display = "none";
+                }
+            }
+        };
+    </script>
+
+</body>
+</html>
